@@ -9,7 +9,7 @@ if [ ${BORG_MODE} = "SERVER" ]; then
   chown borg:borg /home/borg/.ssh/authorized_keys
   exec /usr/sbin/sshd -D
 else
-  DEFAULT_ARCHIVE="${HOSTNAME}_$(date +%Y-%m-%d)"
+  DEFAULT_ARCHIVE="${HOSTNAME}_$(date +%Y-%m-%d-%H-%M)"
   ARCHIVE="${ARCHIVE:-$DEFAULT_ARCHIVE}"
 
   if [ -n "${EXTRACT_TO:-}" ]; then
