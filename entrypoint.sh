@@ -28,7 +28,7 @@ else
   if [ -n "${COMPRESSION:-}" ]; then
     COMPRESSION="--compression=${COMPRESSION}"
   else
-    COMPRESSION=''
+    COMPRESSION='zlib,5'
   fi
 
   if [ -n "${EXCLUDE:-}" ]; then
