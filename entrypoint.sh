@@ -42,20 +42,20 @@ else
     EXCLUDE_BORG=''
   fi
 
-	if [ -n "${PRUNE_PREFIX:-}" ]; then
-		PRUNE_PREFIX="--prefix=${PRUNE_PREFIX}"
-	else
-		PRUNE_PREFIX=''
-	fi
-	if [ -z "${KEEP_DAILY:-}" ]; then
-		KEEP_DAILY=7
-	fi
-	if [ -z "${KEEP_WEEKLY:-}" ]; then
-		KEEP_WEEKLY=4
-	fi
-	if [ -z "${KEEP_MONTHLY:-}" ]; then
-		KEEP_MONTHLY=6
-	fi
+  if [ -n "${PRUNE_PREFIX:-}" ]; then
+    PRUNE_PREFIX="--prefix=${PRUNE_PREFIX}"
+  else
+    PRUNE_PREFIX=''
+  fi
+  if [ -z "${KEEP_DAILY:-}" ]; then
+    KEEP_DAILY=7
+  fi
+  if [ -z "${KEEP_WEEKLY:-}" ]; then
+    KEEP_WEEKLY=4
+  fi
+  if [ -z "${KEEP_MONTHLY:-}" ]; then
+    KEEP_MONTHLY=6
+  fi
 
   while true
   do
