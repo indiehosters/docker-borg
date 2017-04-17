@@ -9,7 +9,6 @@ if [ ${BORG_MODE} = "SERVER" ]; then
   chown borg:borg /home/borg/.ssh/authorized_keys
   exec /usr/sbin/sshd -D
 else
-  export BORG_REPO
   DEFAULT_ARCHIVE="${HOSTNAME}_$(date +%Y-%m-%d)"
   ARCHIVE="${ARCHIVE:-$DEFAULT_ARCHIVE}"
 
@@ -63,8 +62,9 @@ else
     cd /domains
     for domain in `ls .`
     do
-      echo $domain
-      cd /domains/$domain
+      export BORG_REPO=${BORG_FOLDER}/${domain}
+      echo "Backing up ${domain} in ${BORG_REPO}"
+      cd /domains/${domain}
       if [ -f ./scripts/pre-backup ]
       then
         ./scripts/pre-backup
