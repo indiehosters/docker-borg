@@ -4,7 +4,9 @@ ENV BORG_VERSION=1.0.10
 
 RUN set -x \
   && apt-get update \
-  && apt-get install -y curl \
+  && apt-get install -y --force-yes apt-transport-https ca-certificates curl\
+  && apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D \
+  && echo "deb https://apt.dockerproject.org/repo debian-jessie main" > /etc/apt/sources.list.d/docker.list \
   && sed -i "s/httpredir.debian.org/`curl -s -D - http://httpredir.debian.org/demo/debian/ | awk '/^Link:/ { print $2 }' | sed -e 's@<http://\(.*\)/debian/>;@\1@g'`/" /etc/apt/sources.list \
   && apt-get update \
   && apt-get install -y \
