@@ -1,6 +1,10 @@
 #!/bin/bash -eux
 
 if [ ${BORG_MODE} = "SERVER" ]; then
+  sed -i \
+    -e 's/^#PasswordAuthentication yes$/PasswordAuthentication no/g' \
+    -e 's/^PermitRootLogin without-password$/PermitRootLogin no/g' \
+    /etc/ssh/sshd_config
   dpkg-reconfigure openssh-server
   chown borg:borg /home/borg/.ssh/authorized_keys
   exec /usr/sbin/sshd -D

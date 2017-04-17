@@ -29,10 +29,7 @@ RUN set -x \
   && mkdir /var/run/sshd \
   && mkdir /home/borg/.ssh \
   && chmod 700 /home/borg/.ssh \
-  && chown borg:borg /home/borg/.ssh \
-  && sed -i \
-    -e 's/^#PasswordAuthentication yes$/PasswordAuthentication no/g' \
-    -e 's/^PermitRootLogin without-password$/PermitRootLogin no/g' \
-    /etc/ssh/sshd_config
+  && chown borg:borg /home/borg/.ssh
+
 COPY entrypoint.sh /entrypoint.sh
 ENTRYPOINT /entrypoint.sh
