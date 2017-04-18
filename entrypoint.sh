@@ -56,8 +56,7 @@ else
 
   while true
   do
-    DEFAULT_ARCHIVE="${HOSTNAME}_$(date +%Y-%m-%d-%H-%M)"
-    ARCHIVE="${ARCHIVE:-$DEFAULT_ARCHIVE}"
+    ARCHIVE="${HOSTNAME}_$(date +%Y-%m-%d-%H-%M)"
     cd /domains
     for domain in `ls .`
     do
