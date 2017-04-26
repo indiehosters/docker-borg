@@ -39,11 +39,6 @@ else
     EXCLUDE_BORG=''
   fi
 
-  if [ -n "${PRUNE_PREFIX:-}" ]; then
-    PRUNE_PREFIX="--prefix=${PRUNE_PREFIX}"
-  else
-    PRUNE_PREFIX=''
-  fi
   if [ -z "${KEEP_DAILY:-}" ]; then
     KEEP_DAILY=7
   fi
@@ -69,9 +64,7 @@ else
       fi
       borg create -v --stats --show-rc $COMPRESSION $EXCLUDE_BORG ::"$ARCHIVE" .
     done
-    if [ -n "${PRUNE:-}" ]; then
-      borg prune -v --stats --show-rc $PRUNE_PREFIX --keep-daily=$KEEP_DAILY --keep-weekly=$KEEP_WEEKLY --keep-monthly=$KEEP_MONTHLY
-    fi
+    borg prune -v --stats --show-rc --keep-daily=$KEEP_DAILY --keep-weekly=$KEEP_WEEKLY --keep-monthly=$KEEP_MONTHLY
     borg check -v --show-rc
     sleep ${BACKUP_FREQUENCY}
   done
