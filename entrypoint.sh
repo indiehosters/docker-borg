@@ -62,6 +62,7 @@ else
       then
         ./scripts/pre-backup
       fi
+      borg init
       borg create -v --stats --show-rc $COMPRESSION $EXCLUDE_BORG ::"$ARCHIVE" .
     done
     borg prune -v --stats --show-rc --keep-daily=$KEEP_DAILY --keep-weekly=$KEEP_WEEKLY --keep-monthly=$KEEP_MONTHLY
