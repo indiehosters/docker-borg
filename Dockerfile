@@ -32,5 +32,6 @@ RUN set -x \
   && chmod 700 /home/borg/.ssh \
   && chown borg:borg /home/borg/.ssh
 
+COPY authorized_keys.sample /home/borg/authorized_keys.sample
 COPY entrypoint.sh /entrypoint.sh
 ENTRYPOINT /entrypoint.sh

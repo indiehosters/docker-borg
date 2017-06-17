@@ -7,7 +7,7 @@ if [ ${BORG_MODE} = "SERVER" ]; then
       -e 's/^#PasswordAuthentication yes$/PasswordAuthentication no/g' \
       -e 's/^PermitRootLogin without-password$/PermitRootLogin no/g' \
       /etc/ssh/sshd_config
-    sed -e "s/SSH_KEY/${SSH_KEY}/g" /home/borg/authorized_keys.sample > /home/borg/.ssh/authorized_keys
+    sed -e "s#SSH_KEY#${SSH_KEY}#g" /home/borg/authorized_keys.sample > /home/borg/.ssh/authorized_keys
     chown borg:borg /home/borg/.ssh/authorized_keys
     exec /usr/sbin/sshd -D
   else
