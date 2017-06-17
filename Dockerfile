@@ -1,7 +1,7 @@
 FROM debian:jessie
 
-ENV BORG_VERSION 1.0.10 \
-    LANG C.UTF-8
+ENV BORG_VERSION=1.0.10 \
+    LANG=C.UTF-8
 
 RUN set -x \
   && apt-get update \
