@@ -1,0 +1,1 @@
+command="borg serve --append-only --restrict-to-path /backups",no-pty,no-agent-forwarding,no-port-forwarding,no-X11-forwarding,no-user-rc rsabalabla

@@ -1,13 +1,19 @@
 #!/bin/bash -eux
 
 if [ ${BORG_MODE} = "SERVER" ]; then
-  sed -i \
-    -e 's/^#PasswordAuthentication yes$/PasswordAuthentication no/g' \
-    -e 's/^PermitRootLogin without-password$/PermitRootLogin no/g' \
-    /etc/ssh/sshd_config
-  dpkg-reconfigure openssh-server
-  chown borg:borg /home/borg/.ssh/authorized_keys
-  exec /usr/sbin/sshd -D
+  if [ -n "${SSH_KEY:-}" ]; then
+    sed -i \
+      -e 's/^#PasswordAuthentication yes$/PasswordAuthentication no/g' \
+      -e 's/^PermitRootLogin without-password$/PermitRootLogin no/g' \
+      /etc/ssh/sshd_config
+    dpkg-reconfigure openssh-server
+    sed -e "s/SSH_KEY/${SSH_KEY}/g" /home/borg/authorized_keys.sample > /home/borg/.ssh/authorized_keys
+    chown borg:borg /home/borg/.ssh/authorized_keys
+    exec /usr/sbin/sshd -D
+  else
+    echo "You need to give an SSH_KEY env variable"
+    quit
+  fi
 else
   if [ -n "${EXTRACT_TO:-}" ]; then
     mkdir -p "$EXTRACT_TO"
