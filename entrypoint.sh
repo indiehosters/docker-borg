@@ -74,8 +74,8 @@ else
       fi
       borg init || true
       borg create -v --stats --show-rc $COMPRESSION $EXCLUDE_BORG ::"$ARCHIVE" .
+      borg prune -v --stats --show-rc --keep-hourly=$KEEP_HOURLY --keep-daily=$KEEP_DAILY --keep-weekly=$KEEP_WEEKLY --keep-monthly=$KEEP_MONTHLY
     done
-    borg prune -v --stats --show-rc --keep-daily=$KEEP_DAILY --keep-weekly=$KEEP_WEEKLY --keep-monthly=$KEEP_MONTHLY
     borg check -v --show-rc
     sleep ${BACKUP_FREQUENCY}
   done
