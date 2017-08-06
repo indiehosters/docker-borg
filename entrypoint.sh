@@ -65,6 +65,7 @@ else
     for domain in `ls .`
     do
       export BORG_REPO=${BORG_FOLDER}/${domain}
+      export domain=${domain}
       echo "Backing up ${domain} in ${BORG_REPO}"
       cd /domains/${domain}
       if [ -f ./scripts/pre-backup ]
