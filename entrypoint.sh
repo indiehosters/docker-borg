@@ -92,7 +92,7 @@ else
   fi
 
   if [ -z "${KEEP_HOURLY:-}" ]; then
-    KEEP_DAILY=48
+    KEEP_HOURLY=48
   fi
   if [ -z "${KEEP_DAILY:-}" ]; then
     KEEP_DAILY=14
