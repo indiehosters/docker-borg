@@ -45,6 +45,9 @@ else
     EXCLUDE_BORG=''
   fi
 
+  if [ -z "${KEEP_HOURLY:-}" ]; then
+    KEEP_DAILY=48
+  fi
   if [ -z "${KEEP_DAILY:-}" ]; then
     KEEP_DAILY=7
   fi
