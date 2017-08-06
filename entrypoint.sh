@@ -49,13 +49,13 @@ else
     KEEP_DAILY=48
   fi
   if [ -z "${KEEP_DAILY:-}" ]; then
-    KEEP_DAILY=7
+    KEEP_DAILY=14
   fi
   if [ -z "${KEEP_WEEKLY:-}" ]; then
-    KEEP_WEEKLY=4
+    KEEP_WEEKLY=10
   fi
   if [ -z "${KEEP_MONTHLY:-}" ]; then
-    KEEP_MONTHLY=6
+    KEEP_MONTHLY=12
   fi
 
   while true
