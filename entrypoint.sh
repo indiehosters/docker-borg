@@ -1,5 +1,51 @@
 #!/bin/bash -eux
 
+export PROM_FILE=/textfiles/backup.prom
+
+function calc_bytes {
+  NUM=$1
+  UNIT=$2
+
+  case "$UNIT" in
+  kB)
+    echo $NUM | awk '{ print $1 * 1024 }'
+    ;;
+  MB)
+    echo $NUM | awk '{ print $1 * 1024 * 1024 }'
+    ;;
+  GB)
+    echo $NUM | awk '{ print $1 * 1024 * 1024 * 1024 }'
+    ;;
+  TB)
+    echo $NUM | awk '{ print $1 * 1024 * 1024 * 1024 * 1024 }'
+    ;;
+  esac
+}
+
+function prom_text {
+  COUNTER=$(borg list | wc -l)
+  BORG_INFO=$(borg info ::$ARCHIVE)
+
+  # byte size
+  LAST_SIZE=$(calc_bytes $(echo "$BORG_INFO" |grep "This archive" |awk '{print $3}') $(echo "$BORG_INFO" |grep "This archive" |awk '{print $4}'))
+  LAST_SIZE_COMPRESSED=$(calc_bytes $(echo "$BORG_INFO" |grep "This archive" |awk '{print $5}') $(echo "$BORG_INFO" |grep "This archive" |awk '{print $6}'))
+  LAST_SIZE_DEDUP=$(calc_bytes $(echo "$BORG_INFO" |grep "This archive" |awk '{print $7}') $(echo "$BORG_INFO" |grep "This archive" |awk '{print $8}'))
+  TOTAL_SIZE=$(calc_bytes $(echo "$BORG_INFO" |grep "All archives" |awk '{print $3}') $(echo "$BORG_INFO" |grep "All archives" |awk '{print $4}'))
+  TOTAL_SIZE_COMPRESSED=$(calc_bytes $(echo "$BORG_INFO" |grep "All archives" |awk '{print $5}') $(echo "$BORG_INFO" |grep "All archives" |awk '{print $6}'))
+  TOTAL_SIZE_DEDUP=$(calc_bytes $(echo "$BORG_INFO" |grep "All archives" |awk '{print $7}') $(echo "$BORG_INFO" |grep "All archives" |awk '{print $8}'))
+
+  echo "backup_count{host=$domain} $COUNTER" >> $PROM_FILE
+  echo "backup_files{host=$domain} $(echo "$BORG_INFO" | grep "Number of files" | awk '{print $4}')" >> $PROM_FILE
+  echo "backup_chunks_unique{host=$domain} $(echo "$BORG_INFO" | grep "Chunk index" | awk '{print $3}')" >> $PROM_FILE
+  echo "backup_chunks_total{host=$domain} $(echo "$BORG_INFO" | grep "Chunk index" | awk '{print $4}')" >> $PROM_FILE
+  echo "backup_last_size{host=$domain} $LAST_SIZE" >> $PROM_FILE
+  echo "backup_last_size_compressed{host=$domain} $LAST_SIZE_COMPRESSED" >> $PROM_FILE
+  echo "backup_last_size_dedup{host=$domain} $LAST_SIZE_DEDUP" >> $PROM_FILE
+  echo "backup_total_size{host=$domain} $TOTAL_SIZE" >> $PROM_FILE
+  echo "backup_total_size_compressed{host=$domain} $TOTAL_SIZE_COMPRESSED" >> $PROM_FILE
+  echo "backup_total_size_dedup{host=$domain} $TOTAL_SIZE_DEDUP" >> $PROM_FILE
+}
+
 if [ ${BORG_MODE} = "SERVER" ]; then
   if [ -n "${SSH_KEY:-}" ]; then
     dpkg-reconfigure openssh-server
@@ -60,6 +106,7 @@ else
 
   while true
   do
+    echo "backup_starting_time $(date +%s)" > $PROM_FILE
     export ARCHIVE="${HOSTNAME}_$(date +%Y-%m-%d-%H-%M)"
     cd /domains
     for domain in `ls .`
@@ -75,8 +122,9 @@ else
       borg init || true
       borg create -v --stats --show-rc $COMPRESSION $EXCLUDE_BORG ::"$ARCHIVE" .
       borg prune -v --stats --show-rc --keep-hourly=$KEEP_HOURLY --keep-daily=$KEEP_DAILY --keep-weekly=$KEEP_WEEKLY --keep-monthly=$KEEP_MONTHLY
+      prom_text()
     done
-    borg check -v --show-rc
+    echo "backup_ending_time $(date +%s)" >> $PROM_FILE
     sleep ${BACKUP_FREQUENCY}
   done
 fi
