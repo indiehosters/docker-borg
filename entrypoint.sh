@@ -7,6 +7,9 @@ function calc_bytes {
   UNIT=$2
 
   case "$UNIT" in
+  B)
+    echo $NUM
+    ;;
   kB)
     echo $NUM | awk '{ print $1 * 1024 }'
     ;;
