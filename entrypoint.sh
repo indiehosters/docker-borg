@@ -34,16 +34,16 @@ function prom_text {
   TOTAL_SIZE_COMPRESSED=$(calc_bytes $(echo "$BORG_INFO" |grep "All archives" |awk '{print $5}') $(echo "$BORG_INFO" |grep "All archives" |awk '{print $6}'))
   TOTAL_SIZE_DEDUP=$(calc_bytes $(echo "$BORG_INFO" |grep "All archives" |awk '{print $7}') $(echo "$BORG_INFO" |grep "All archives" |awk '{print $8}'))
 
-  echo "backup_count{host=$domain} $COUNTER" >> $PROM_FILE
-  echo "backup_files{host=$domain} $(echo "$BORG_INFO" | grep "Number of files" | awk '{print $4}')" >> $PROM_FILE
-  echo "backup_chunks_unique{host=$domain} $(echo "$BORG_INFO" | grep "Chunk index" | awk '{print $3}')" >> $PROM_FILE
-  echo "backup_chunks_total{host=$domain} $(echo "$BORG_INFO" | grep "Chunk index" | awk '{print $4}')" >> $PROM_FILE
-  echo "backup_last_size{host=$domain} $LAST_SIZE" >> $PROM_FILE
-  echo "backup_last_size_compressed{host=$domain} $LAST_SIZE_COMPRESSED" >> $PROM_FILE
-  echo "backup_last_size_dedup{host=$domain} $LAST_SIZE_DEDUP" >> $PROM_FILE
-  echo "backup_total_size{host=$domain} $TOTAL_SIZE" >> $PROM_FILE
-  echo "backup_total_size_compressed{host=$domain} $TOTAL_SIZE_COMPRESSED" >> $PROM_FILE
-  echo "backup_total_size_dedup{host=$domain} $TOTAL_SIZE_DEDUP" >> $PROM_FILE
+  echo "backup_count{host=\"$domain\"} $COUNTER" >> $PROM_FILE
+  echo "backup_files{host=\"$domain\"} $(echo "$BORG_INFO" | grep "Number of files" | awk '{print $4}')" >> $PROM_FILE
+  echo "backup_chunks_unique{host=\"$domain\"} $(echo "$BORG_INFO" | grep "Chunk index" | awk '{print $3}')" >> $PROM_FILE
+  echo "backup_chunks_total{host=\"$domain\"} $(echo "$BORG_INFO" | grep "Chunk index" | awk '{print $4}')" >> $PROM_FILE
+  echo "backup_last_size{host=\"$domain\"} $LAST_SIZE" >> $PROM_FILE
+  echo "backup_last_size_compressed{host=\"$domain\"} $LAST_SIZE_COMPRESSED" >> $PROM_FILE
+  echo "backup_last_size_dedup{host=\"$domain\"} $LAST_SIZE_DEDUP" >> $PROM_FILE
+  echo "backup_total_size{host=\"$domain\"} $TOTAL_SIZE" >> $PROM_FILE
+  echo "backup_total_size_compressed{host=\"$domain\"} $TOTAL_SIZE_COMPRESSED" >> $PROM_FILE
+  echo "backup_total_size_dedup{host=\"$domain\"} $TOTAL_SIZE_DEDUP" >> $PROM_FILE
 }
 
 if [ ${BORG_MODE} = "SERVER" ]; then
