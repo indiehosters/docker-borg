@@ -1,6 +1,6 @@
 FROM debian:jessie
 
-ENV BORG_VERSION=1.0.10 \
+ENV BORG_VERSION=1.0.11 \
     LANG=C.UTF-8
 
 RUN set -x \
