@@ -107,27 +107,23 @@ else
     KEEP_MONTHLY=12
   fi
 
-  while true
+  echo "backup_starting_time $(date +%s)" > $PROM_FILE
+  export ARCHIVE="${HOSTNAME}_$(date +%Y-%m-%d-%H-%M)"
+  cd /domains
+  for domain in `ls .`
   do
-    echo "backup_starting_time $(date +%s)" > $PROM_FILE
-    export ARCHIVE="${HOSTNAME}_$(date +%Y-%m-%d-%H-%M)"
-    cd /domains
-    for domain in `ls .`
-    do
-      export BORG_REPO=${BORG_FOLDER}/${domain}
-      export domain=${domain}
-      echo "Backing up ${domain} in ${BORG_REPO}"
-      cd /domains/${domain}
-      if [ -f ./scripts/pre-backup ]
-      then
-        ./scripts/pre-backup
-      fi
-      borg init || true
-      borg create -v --stats --show-rc $COMPRESSION $EXCLUDE_BORG ::"$ARCHIVE" .
-      borg prune -v --stats --show-rc --keep-hourly=$KEEP_HOURLY --keep-daily=$KEEP_DAILY --keep-weekly=$KEEP_WEEKLY --keep-monthly=$KEEP_MONTHLY
-      prom_text
-    done
-    echo "backup_ending_time $(date +%s)" >> $PROM_FILE
-    sleep ${BACKUP_FREQUENCY}
+    export BORG_REPO=${BORG_FOLDER}/${domain}
+    export domain=${domain}
+    echo "Backing up ${domain} in ${BORG_REPO}"
+    cd /domains/${domain}
+    if [ -f ./scripts/pre-backup ]
+    then
+      ./scripts/pre-backup
+    fi
+    borg init || true
+    borg create -v --stats --show-rc $COMPRESSION $EXCLUDE_BORG ::"$ARCHIVE" .
+    borg prune -v --stats --show-rc --keep-hourly=$KEEP_HOURLY --keep-daily=$KEEP_DAILY --keep-weekly=$KEEP_WEEKLY --keep-monthly=$KEEP_MONTHLY
+    prom_text
   done
+  echo "backup_ending_time $(date +%s)" >> $PROM_FILE
 fi
