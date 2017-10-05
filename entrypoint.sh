@@ -95,10 +95,10 @@ else
   fi
 
   if [ -z "${KEEP_HOURLY:-}" ]; then
-    KEEP_HOURLY=48
+    KEEP_HOURLY=10
   fi
   if [ -z "${KEEP_DAILY:-}" ]; then
-    KEEP_DAILY=14
+    KEEP_DAILY=30
   fi
   if [ -z "${KEEP_WEEKLY:-}" ]; then
     KEEP_WEEKLY=10
