@@ -34,3 +34,4 @@ RUN set -x \
 COPY cron /usr/local/bin/
 COPY authorized_keys.sample /home/borg/authorized_keys.sample
 COPY entrypoint.sh /entrypoint.sh
+ENTRYPOINT /entrypoint.sh
