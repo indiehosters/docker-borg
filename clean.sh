@@ -16,3 +16,4 @@ do
     borg delete ::${ARCHIVE}
   fi
 done
+chown -R 500:500 /backups
