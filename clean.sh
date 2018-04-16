@@ -11,6 +11,8 @@ cd /backups
 for domain in `ls .`
 do
   export BORG_REPO=${domain}
-  export ARCHIVE=::`borg list | grep ${DATE_TO_DELETE} | cut -d" " -f1`
-  borg delete ${ARCHIVE}
+  export ARCHIVE=`borg list | grep ${DATE_TO_DELETE} | cut -d" " -f1`
+  if [ -n "$ARCHIVE" ]; then
+    borg delete ::${ARCHIVE}
+  fi
 done
