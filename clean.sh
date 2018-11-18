@@ -13,7 +13,9 @@ do
   export BORG_REPO=${domain}
   export ARCHIVE=`borg list | grep ${DATE_TO_DELETE} | cut -d" " -f1`
   if [ -n "$ARCHIVE" ]; then
+    borg config ./${BORG_REPO}/ append_only 0
     borg delete ::${ARCHIVE}
+    borg config ./${BORG_REPO}/ append_only 1
   fi
 done
 chown -R 500:500 /backups
