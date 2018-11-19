@@ -118,8 +118,7 @@ else
     if [ `date +%F` == $LAST_BACKUP_DATE ]; then
       echo "Backing up ${domain} in ${BORG_REPO}"
       cd /domains/${domain}
-      if [ -f ./scripts/pre-backup ]
-      then
+      if [ -f ./scripts/pre-backup ]; then
         ./scripts/pre-backup
       fi
       borg init || true
