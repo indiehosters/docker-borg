@@ -36,4 +36,7 @@ COPY cron /usr/local/bin/
 COPY authorized_keys.sample /home/borg/authorized_keys.sample
 COPY entrypoint.sh /entrypoint.sh
 COPY clean.sh /clean.sh
+RUN curl -L https://github.com/docker/compose/releases/download/1.21.0/docker-compose-Linux-x86_64 > /usr/local/bin/docker-compose \
+&& chmod +x /usr/local/bin/docker-compose
+
 ENTRYPOINT /entrypoint.sh
