@@ -115,7 +115,7 @@ else
     export BORG_REPO=${BORG_FOLDER}/${domain}
     export domain=${domain}
     export LAST_BACKUP_DATE=`borg list | tail -n1 | cut -d',' -f2 | cut -d" " -f2`
-    if [ `date +%F` == $LAST_BACKUP_DATE ]; then
+    if [ `date +%F` != $LAST_BACKUP_DATE ]; then
       echo "Backing up ${domain} in ${BORG_REPO}"
       cd /domains/${domain}
       if [ -f ./scripts/pre-backup ]; then
