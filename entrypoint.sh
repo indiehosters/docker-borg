@@ -55,6 +55,7 @@ if [ ${BORG_MODE} = "SERVER" ]; then
     sed -i \
       -e 's/^#PasswordAuthentication yes$/PasswordAuthentication no/g' \
       -e 's/^PermitRootLogin without-password$/PermitRootLogin no/g' \
+    /etc/ssh/sshd_config
     if [[ $(ls /etc/ssh-keys/ssh_host_*) ]]; then
       echo "Already initialized."
     else
@@ -63,7 +64,6 @@ if [ ${BORG_MODE} = "SERVER" ]; then
       sed -i 's|/ssh/|/ssh-keys/|' /etc/ssh/sshd_config
       sed -i '/^#HostKey/s/^#//' /etc/ssh/sshd_config
     fi
-      /etc/ssh/sshd_config
     sed -e "s#SSH_KEY#${SSH_KEY}#g" /home/borg/authorized_keys.sample > /home/borg/.ssh/authorized_keys
     chown borg:borg /home/borg/.ssh/authorized_keys
     exec /usr/sbin/sshd -D
