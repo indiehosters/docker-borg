@@ -61,9 +61,9 @@ if [ ${BORG_MODE} = "SERVER" ]; then
     else
       echo "Initializing ssh-keys folder..."
       cp /etc/ssh/ssh_host_* /etc/ssh-keys
-      sed -i 's|/ssh/|/ssh-keys/|' /etc/ssh/sshd_config
-      sed -i '/^#HostKey/s/^#//' /etc/ssh/sshd_config
     fi
+    sed -i 's|/ssh/|/ssh-keys/|' /etc/ssh/sshd_config
+    sed -i '/^#HostKey/s/^#//' /etc/ssh/sshd_config
     sed -e "s#SSH_KEY#${SSH_KEY}#g" /home/borg/authorized_keys.sample > /home/borg/.ssh/authorized_keys
     chown borg:borg /home/borg/.ssh/authorized_keys
     exec /usr/sbin/sshd -D
